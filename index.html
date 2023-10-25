@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tax Calculator</title>
+  <style>
+    /* Add your styles here */
+    body {
+      background-image: url("images/main.jpeg");
+      background-size: cover;
+      position: relative;
+      display: flex;
+      background-repeat: no-repeat repeat;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: cadetblue;
+    }
+
+    .calculator-container {
+      width: 40%;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 2;
+    }
+
+    .calculator-container h1 {
+      text-align: center;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .radio-options {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .radio-options label {
+      margin-right: 20px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .result-window {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      z-index: 3;
+      width: 80%;
+      max-width: 400px;
+      overflow: auto;
+    }
+
+    .result-window h2 {
+      margin-bottom: 20px;
+    }
+
+    .result-window table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+
+    .result-window th,
+    .result-window td {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+
+    .result-window th {
+      background-color: #f2f2f2;
+    }
+
+    .close-button {
+      margin-top: 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 10px 20px;
+      transition: background-color 0.3s ease;
+    }
+
+    .close-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="calculator-container">
+    <h1>Tax Calculator</h1>
+    <label for="tax-type">Select Tax Type:</label>
+    <select id="tax-type">
+      <option value="paye">PAYE</option>
+      <option value="vat">VAT</option>
+    </select>
+    <br><br>
+    <div id="paye-calculator">
+      <h3>PAYE Details:</h3>
+      <label for="name">Name:</label>
+      <input type="text" id="name" placeholder="Enter name">
+      <br><br>
+      <label for="age">Age:</label>
+      <input type="number" id="age" placeholder="Enter age">
+      <br><br>
+      <label for="gender">Gender:</label>
+      <select id="gender">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select><br><br>
+      <div class="radio-options">
+        <label for="disability-yes">Do you have any disability?</label>
+        <input type="radio" id="disability-yes" name="disability" value="yes">
+        <label for="disability-yes">Yes</label><br>
+        <input type="radio" id="disability-no" name="disability" value="no">
+        <label for="disability-no">No</label>
+      </div><br>
+      <div class="radio-options">
+        <label for="disability-exemption">Do you have a disability exemption certificate? </label>
+        <input type="radio" id="exemption-yes" name="disability-exemption" value="yes">
+        <label for="exemption-yes">Yes:</label>
+        <input type="radio" id="exemption-no" name="disability-exemption" value="no">
+        <label for="exemption-no">No:</label>
+      </div><br>
+      <label for="marital-status">Marital status:</label>
+      <select id="marital-status">
+        <option value="single">Single</option>
+        <option value="married">Married</option>
+      </select>
+      <br><br>
+      <div class="radio-options">
+        <label for="employment">Employed?</label>
+        <input type="radio" id="employment-yes" name="employment" value="yes">
+        <label for="employment-yes">Yes:</label><br>
+        <input type="radio" id="employment-no" name="employment" value="no">
+        <label for="employment-no">No:</label>
+      </div>
+      <br>
+      <label for="total-income">Total income:</label>
+      <input type="number" id="total-income" placeholder="Enter total income">
+      <br><br>
+      <div class="radio-options">
+        <label for="payment-period">Payment Period:</label>
+        <input type="radio" id="period-month" name="payment-period" value="month">
+        <label for="period-month">Month</label>
+        <input type="radio" id="period-year" name="payment-period" value="year">
+        <label for="period-year">Year</label>
+      </div>
+      <label for="nssf-contribution">NSSF:</label>
+      <input type="number" id="nssf-contribution" placeholder="Enter NSSSF contribution">
+      <br><br>
+      <label for="life-contribution">Life contribution:</label>
+      <input type="number" id="life-contribution" placeholder="Enter your contribution">
+      <br><br>
+      <div class="radio-options">
+        <label f9or="mortgage">Do you have a mortgage?</label>
+        <input type="radio" id="mortgage-yes" name="mortgage" value="yes">
+        <label for="mortgage-yes">Yes</label>
+        <input type="radio" id="mortgage-no" name="mortgage" value="no">
+        <label for="mortgage-no">No</label>
+      </div>
+      <br>
+      <label for="fiscal-year">Fiscal year:</label>
+      <select id="fiscal-year">
+        <option>2017</option>
+        <option>2018</option>
+        <option>2019</option>
+        <option>2020</option>
+        <option>2021</option>
+        <option>2022</option>
+        <option>2023</option>
+      </select>
+      <br><br>
+      <button id="paye-button">Calculate</button>
+    </div>
+
+    <div class="result-window" id="paye-result-window" style="display: none;">
+      <h2>Net Tax Details</h2>
+      <table>
+        <tr>
+          <th>Item</th>
+          <th>Amount</th>
+        </tr>
+        <tr>
+          <td>Gross Pay</td>
+          <td id="gross-pay"></td>
+        </tr>
+        <tr>
+          <td>Life Contribution</td>
+          <td id="life-contribution-result"></td>
+        </tr>
+        <tr>
+          <td>Disability Discount</td>
+          <td id="disability-discount"></td>
+        </tr>
+        <tr>
+          <td>Total Deductions</td>
+          <td id="total-deduction-result"></td>
+        </tr>
+        <tr>
+          <td>Taxable Pay</td>
+          <td id="taxable-pay"></td>
+        </tr>
+        <tr>
+          <td>Personal Relief</td>
+          <td id="personal-relief"></td>
+        </tr>
+        <tr>
+          <td>Net Tax</td>
+          <td id="net-tax"></td>
+        </tr>
+        <tr>
+          <td><h2>Net Pay</h2></td>
+          <td id="net-pay"></td>
+        </tr>
+      </table>
+      <br><br>
+      <button class="close-button">Close</button>
+    </div>
+
+    <div id="vat-calculator" style="display: none;">
+        <h3>VAT Details:</h3>
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" placeholder="Enter amount">
+        <br><br>
+        <label for="vat-rate">VAT Rate:</label>
+        <input type="number" id="vat-rate" placeholder="Enter VAT Rate">
+        <br><br>
+        <label for="options">Options:</label>
+        <select>
+          <option value="add-vat">Add VAT</option>
+          <option value="remove-vat">Remove VAT</option>
+        </select>
+        <br><br>
+        <button id="vat-button">Calculate</button>
+      </div>
+
+
+    <div class="result-window" id="vat-result-window" style="display: none;">
+        <h2>VAT Details</h2>
+        <table>
+            <tr>
+              <th>Item</th>
+              <th>Amount</th>
+            </tr>
+            <tr>
+                <td>Net Amount (excluding VAT)</td>
+                <td id="net-amount"></td>
+              </tr>
+              <tr>
+                <td>VAT Amount</td>
+                <td id="vat-amount"></td>
+              </tr>
+              <tr>
+                <td>Gross Amount (Including VAT)</td>
+                <td id="gross-amount"></td>
+              </tr>
+        </table>
+        <br><br>
+        <button class="close-button">Close</button>
+    </div>
+  
+  
+
+    <script>
+      const calculatorContainer = document.querySelector('.calculator-container');
+      const calculateButton = document.getElementById('calculate-button');
+      const resultWindow = document.querySelector('.result-window');
+      const closeButton = document.querySelector('.close-button');
+      const taxTypeDropdown = document.getElementById('tax-type');
+      const payeCalculator = document.getElementById('paye-calculator');
+      const vatCalculator = document.getElementById('vat-calculator');
+      const vatButton = document.getElementById('vat-button');
+      const payeButton = document.getElementById('paye-button');
+
+      taxTypeDropdown.addEventListener('change', () => {
+        if (taxTypeDropdown.value === 'paye') {
+          payeCalculator.style.display = 'block';
+          vatCalculator.style.display = 'none';
+        } else if (taxTypeDropdown.value === 'vat') {
+          payeCalculator.style.display = 'none';
+          vatCalculator.style.display = 'block';
+        }
+      });
+
+      
+vatButton.addEventListener('click', () => {
+  // Get input values
+  const amount = parseFloat(document.getElementById('amount').value) || 0;
+  const vatRate = parseFloat(document.getElementById('vat-rate').value) || 0;
+  const options = document.querySelector('#vat-calculator select').value;
+
+  // Calculate VAT
+  let netAmount, vatAmount, grossAmount;
+  if (options === 'add-vat') {
+    netAmount = amount;
+    vatAmount = amount * vatRate / 100;
+    grossAmount = amount + vatAmount;
+  } else {
+    grossAmount = amount;
+    vatAmount = amount / (1 + vatRate / 100) * vatRate / 100;
+    netAmount = amount - vatAmount;
+  }
+
+  // Update the result values
+  document.getElementById('net-amount').textContent = `ksh $${netAmount.toFixed(2)}`;
+  document.getElementById('vat-amount').textContent = `ksh $${vatAmount.toFixed(2)}`;
+  document.getElementById('gross-amount').textContent = `ksh $${grossAmount.toFixed(2)}`;
+
+  // Show the result window and shadow
+  const resultWindow = window.open('', 'VAT Result', 'width=400,height=400');
+        resultWindow.document.body.innerHTML = `
+          <h2>VAT Result</h2>
+          <table>
+            <tr>
+              <th>Item</th>
+              <th>Amount</th>
+            </tr>
+            <tr>
+              <td>Net Amount (excluding VAT)</td>
+              <td>${Number(netAmount.toFixed(2)).toLocaleString()} KSh</td>
+            </tr>
+            <tr>
+              <td>VAT Amount</td>
+              <td>${Number(vatAmount.toFixed(2)).toLocaleString()} KSh</td>
+              <tr>
+              <td>Gross Amount (Including VAT)</td>
+              <td>${Number(grossAmount.toFixed(2)).toLocaleString()} KSh</td>
+            </tr>
+          </table>
+          <br><br>
+          <button class="close-button">Close</button>
+        `;
+
+        resultWindow.document.querySelector('.close-button').addEventListener('click', () => {
+          resultWindow.close();
+        });
+
+});
+
+payeButton.addEventListener('click', () => {
+  // Get input values
+  const isDisability = document.getElementById('disability-yes').checked;
+  const totalIncome = parseFloat(document.getElementById('total-income').value) || 0;
+  const lifeContribution = parseFloat(document.getElementById('life-contribution').value) || 0;
+
+  // Calculate deductions and net tax
+  const grossPay = totalIncome;
+  const totalDeduction = lifeContribution;
+  const taxablePay = grossPay - totalDeduction;
+  const personalRelief = 2000; // Example personal relief
+  const netTax = Math.max(0, taxablePay * 0.3 - personalRelief);
+  const netPay = taxablePay - netTax;
+  
+  // Update the result values
+  document.getElementById('gross-pay').textContent = `ksh $${grossPay.toFixed(2)}`;
+  document.getElementById('life-contribution-result').textContent = `ksh $${lifeContribution.toFixed(2)}`;
+  document.getElementById('total-deduction-result').textContent = `ksh $${totalDeduction.toFixed(2)}`;
+  document.getElementById('taxable-pay').textContent = `ksh $${taxablePay.toFixed(2)}`;
+  document.getElementById('personal-relief').textContent = `ksh $${personalRelief.toFixed(2)}`;
+  document.getElementById('net-tax').textContent = `ksh $${netTax.toFixed(2)}`;
+  document.getElementById('net-pay').textContent = `ksh $${netPay.toFixed(2)}`;
+
+        // Show the result window and shadow
+       
+        const resultWindow = window.open('', 'PAYE Result', 'width=400,height=400');
+        resultWindow.document.body.innerHTML = `
+          <h2>PAYE Result</h2>
+          <table>
+            <tr>
+              <th>Item</th>
+              <th>Amount</th>
+            </tr>
+            <tr>
+              <td>Gross Pay</td>
+              <td>${Number(grossPay.toFixed(2)).toLocaleString()} KSh</td>
+            </tr>
+            <tr>
+              <td>Life Contribution</td>
+              <td>${Number(lifeContribution.toFixed(2)).toLocaleString()} KSh</td>
+            </tr>
+            <tr>
+              <td>Disability Discount</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td>Total Deductions</td>
+              <td>${Number(totalDeduction.toFixed(2)).toLocaleString()} KSh</td>
+            </tr>
+            <tr>
+              <td>Taxable Pay</td>
+              <td>${Number(taxablePay.toFixed(2)).toLocaleString()} KSh</td>
+            </tr>
+            <tr>
+              <td>Personal Relief</td>
+              <td>${Number(personalRelief.toFixed(2)).toLocaleString()} KSh</td>
+            </tr>
+            <tr>
+              <td>Net Tax</td>
+              <td>${Number(netTax.toFixed(2)).toLocaleString()} KSh</td>
+            </tr>
+            <tr>
+              <td><h2>Net Pay</h2></td>
+              <td>${Number(netPay.toFixed(2)).toLocaleString()} KSh</td>
+            </tr>
+          </table>
+          <br><br>
+          <button class="close-button">Close</button>
+        `;
+
+        resultWindow.document.querySelector('.close-button').addEventListener('click', () => {
+          resultWindow.close();
+        });
+      });
+
+
+
+      document.querySelectorAll('.result-window .close-button').forEach((button) => {
+      button.addEventListener('click', () => {
+        document.querySelector('.calculator-container').style.display = 'block';
+        document.getElementById('vat-result-window').style.display = 'none';
+        document.getElementById('paye-result-window').style.display = 'none';
+        });
+      });
+    </script>
+</body>
+
+</html>
